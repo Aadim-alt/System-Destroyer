@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Tester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>System Tester</h1>
+    <p>Test your system's capability with increasing levels of intensity.</p>
+    <button id="start-test">Start Test</button>
+    <div id="level-display"></div>
+    <script>
+        document.getElementById('start-test').addEventListener('click', startTest);
+
+        let currentLevel = 1;
+        const levelDisplay = document.getElementById('level-display');
+        let achievements = [];
+
+        function loadLevel(level) {
+            const levels = {
+                1: `<h2>Level 1</h2><p>This is a simple level to start with.</p><script>for (let i = 0; i < 1000; i++) { console.log('Level 1: ' + i); }</script>`,
+                2: `<h2>Level 2</h2><p>This level increases the load slightly.</p><script>for (let i = 0; i < 2000; i++) { console.log('Level 2: ' + i); }</script>`,
+                3: `<h2>Level 3</h2><p>This level adds more complexity.</p><script>for (let i = 0; i < 4000; i++) { console.log('Level 3: ' + i); }</script>`,
+                4: `<h2>Level 4</h2><p>Increasing the complexity further.</p><script>for (let i = 0; i < 8000; i++) { console.log('Level 4: ' + i); }</script>`,
+                5: `<h2>Level 5</h2><p>Adding more DOM elements.</p><script>for (let i = 0; i < 16000; i++) { console.log('Level 5: ' + i); }</script>`,
+                6: `<h2>Level 6</h2><p>Increasing CPU usage.</p><script>for (let i = 0; i < 32000; i++) { console.log('Level 6: ' + i); }</script>`,
+                7: `<h2>Level 7</h2><p>Adding more scripts and calculations.</p><script>for (let i = 0; i < 64000; i++) { console.log('Level 7: ' + i); }</script>`,
+                8: `<h2>Level 8</h2><p>Increasing memory usage.</p><script>for (let i = 0; i < 128000; i++) { console.log('Level 8: ' + i); }</script>`,
+                9: `<h2>Level 9</h2><p>Adding more complex calculations.</p><script>for (let i = 0; i < 256000; i++) { console.log('Level 9: ' + i); }</script>`,
+                10: `<h2>Level 10</h2><p>Final level with maximum complexity.</p><script>for (let i = 0; i < 512000; i++) { console.log('Level 10: ' + i); }</script>`,
+                // 11: `<h2>Level 11</h2><p>Even more challenging.</p><script>for (let i = 0; i < 1024000; i++) { console.log('Level 11: ' + i); }</script>`,
+                // 12: `<h2>Level 12</h2><p>Extreme complexity.</p><script>for (let i = 0; i < 2048000; i++) { console.log('Level 12: ' + i); }</script>`,
+                // 13: `<h2>Level 13</h2><p>Incredible complexity.</p><script>for (let i = 0; i < 4096000; i++) { console.log('Level 13: ' + i); }</script>`,
+                // 14: `<h2>Level 14</h2><p>Unbelievable complexity.</p><script>for (let i = 0; i < 8192000; i++) { console.log('Level 14: ' + i); }</script>`,
+                // 15: `<h2>Level 15</h2><p>Mind-blowing complexity.</p><script>for (let i = 0; i < 16384000; i++) { console.log('Level 15: ' + i); }</script>`,
+                // 16: `<h2>Level 16</h2><p>Overwhelming complexity.</p><script>for (let i = 0; i < 32768000; i++) { console.log('Level 16: ' + i); }</script>`,
+                // 17: `<h2>Level 17</h2><p>Extreme overload.</p><script>for (let i = 0; i < 65536000; i++) { console.log('Level 17: ' + i); }</script>`,
+                // 18: `<h2>Level 18</h2><p>Maximum overload.</p><script>for (let i = 0; i < 131072000; i++) { console.log('Level 18: ' + i); }</script>`,
+                // 19: `<h2>Level 19</h2><p>Beyond maximum.</p><script>for (let i = 0; i < 262144000; i++) { console.log('Level 19: ' + i); }</script>`,
+                // 20: `<h2>Level 20</h2><p>The final challenge.</p><script>for (let i = 0; i < 524288000; i++) { console.log('Level 20: ' + i); }</script>`
+            };
+
+            if (levels[level]) {
+                document.open();
+                document.write(levels[level]);
+                document.close();
+            } else {
+                levelDisplay.innerHTML = 'Test Completed!';
+            }
+        }
+
+        function nextLevel() {
+            currentLevel++;
+            if (currentLevel <= 10) {
+                loadLevel(currentLevel);
+            } else {
+                levelDisplay.innerHTML = 'Test Completed!';
+            }
+        }
+
+        function unlockAchievement(level) {
+            achievements.push(`Level ${level} Crash Survived`);
+            alert(`Achievement Unlocked: Level ${level} Crash Survived`);
+        }
+
+        function saveAchievements() {
+            const blob = new Blob([JSON.stringify(achievements)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'achievements.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function startTest() {
+            loadLevel(currentLevel);
+            window.onbeforeunload = function() {
+                unlockAchievement(currentLevel);
+                saveAchievements();
+                nextLevel();
+            };
+        }
+    </script>
+</body>
+</html>
