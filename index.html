@@ -3,98 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Tester</title>
+    <title>System Stress Test</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+            color: #333;
         }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        main {
+            padding: 20px;
+            text-align: center;
+        }
+        h1, h2 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .level-button {
+            padding: 15px 30px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
             cursor: pointer;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+        .level-button:hover {
+            background-color: #45a049;
+        }
+        .warning {
+            color: red;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .privacy-policy {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-top: 30px;
+            font-size: 14px;
+        }
+        .privacy-policy a {
+            color: #4CAF50;
+        }
+        .achievements {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f4f4f4;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <h1>System Tester</h1>
-    <p>Test your system's capability with increasing levels of intensity.</p>
-    <button id="start-test">Start Test</button>
-    <div id="level-display"></div>
-    <script>
-        document.getElementById('start-test').addEventListener('click', startTest);
+    <header>
+        <h1>System Stress Test</h1>
+        <p>Test your system's capability by gradually increasing the load!</p>
+    </header>
 
+    <main>
+        <button id="start-test" class="level-button">Start Test</button>
+        <div id="level-display"></div>
+        <div class="warning" id="warning"></div>
+        
+        <div class="privacy-policy">
+            <h3>Privacy Policy</h3>
+            <p>We do not collect or share any personal data. This test is only for local stress testing of your browser's capabilities. The data generated during the test is stored only in your browser and is not sent to any external servers.</p>
+            <p><strong>Important:</strong> This tool can cause your browser or device to slow down or crash. Use at your own risk.</p>
+        </div>
+        
+        <div id="achievements" class="achievements"></div>
+    </main>
+
+    <script>
         let currentLevel = 1;
         const levelDisplay = document.getElementById('level-display');
+        const warningDisplay = document.getElementById('warning');
+        const achievementsDisplay = document.getElementById('achievements');
         let achievements = [];
 
+        // Function to load a specific level of the stress test
         function loadLevel(level) {
             const levels = {
-                1: `<h2>Level 1</h2><p>This is a simple level to start with.</p><script>for (let i = 0; i < 1000; i++) { console.log('Level 1: ' + i); }</script>`,
-                2: `<h2>Level 2</h2><p>This level increases the load slightly.</p><script>for (let i = 0; i < 2000; i++) { console.log('Level 2: ' + i); }</script>`,
-                3: `<h2>Level 3</h2><p>This level adds more complexity.</p><script>for (let i = 0; i < 4000; i++) { console.log('Level 3: ' + i); }</script>`,
-                4: `<h2>Level 4</h2><p>Increasing the complexity further.</p><script>for (let i = 0; i < 8000; i++) { console.log('Level 4: ' + i); }</script>`,
-                5: `<h2>Level 5</h2><p>Adding more DOM elements.</p><script>for (let i = 0; i < 16000; i++) { console.log('Level 5: ' + i); }</script>`,
-                6: `<h2>Level 6</h2><p>Increasing CPU usage.</p><script>for (let i = 0; i < 32000; i++) { console.log('Level 6: ' + i); }</script>`,
-                7: `<h2>Level 7</h2><p>Adding more scripts and calculations.</p><script>for (let i = 0; i < 64000; i++) { console.log('Level 7: ' + i); }</script>`,
-                8: `<h2>Level 8</h2><p>Increasing memory usage.</p><script>for (let i = 0; i < 128000; i++) { console.log('Level 8: ' + i); }</script>`,
-                9: `<h2>Level 9</h2><p>Adding more complex calculations.</p><script>for (let i = 0; i < 256000; i++) { console.log('Level 9: ' + i); }</script>`,
-                10: `<h2>Level 10</h2><p>Final level with maximum complexity.</p><script>for (let i = 0; i < 512000; i++) { console.log('Level 10: ' + i); }</script>`,
-                11: `<h2>Level 11</h2><p>Even more challenging.</p><script>for (let i = 0; i < 1024000; i++) { console.log('Level 11: ' + i); }</script>`,
-                12: `<h2>Level 12</h2><p>Extreme complexity.</p><script>for (let i = 0; i < 2048000; i++) { console.log('Level 12: ' + i); }</script>`,
-                13: `<h2>Level 13</h2><p>Incredible complexity.</p><script>for (let i = 0; i < 4096000; i++) { console.log('Level 13: ' + i); }</script>`,
-                14: `<h2>Level 14</h2><p>Unbelievable complexity.</p><script>for (let i = 0; i < 8192000; i++) { console.log('Level 14: ' + i); }</script>`,
-                15: `<h2>Level 15</h2><p>Mind-blowing complexity.</p><script>for (let i = 0; i < 16384000; i++) { console.log('Level 15: ' + i); }</script>`,
-                16: `<h2>Level 16</h2><p>Overwhelming complexity.</p><script>for (let i = 0; i < 32768000; i++) { console.log('Level 16: ' + i); }</script>`,
-                17: `<h2>Level 17</h2><p>Extreme overload.</p><script>for (let i = 0; i < 65536000; i++) { console.log('Level 17: ' + i); }</script>`,
-                18: `<h2>Level 18</h2><p>Maximum overload.</p><script>for (let i = 0; i < 131072000; i++) { console.log('Level 18: ' + i); }</script>`,
-                19: `<h2>Level 19</h2><p>Beyond maximum.</p><script>for (let i = 0; i < 262144000; i++) { console.log('Level 19: ' + i); }</script>`,
-                20: `<h2>Level 20</h2><p>The final challenge.</p><script>for (let i = 0; i < 524288000; i++) { console.log('Level 20: ' + i); }</script>`
+                1: { message: "Basic stress test with simple loops.", complexity: 1000, stressFunction: simpleLoop },
+                2: { message: "Adding more complexity with DOM manipulations.", complexity: 5000, stressFunction: domManipulation },
+                3: { message: "Heavy computations, including recursive calculations.", complexity: 20000, stressFunction: recursiveCalc },
+                4: { message: "Highly intensive computations with memory-heavy tasks.", complexity: 100000, stressFunction: memoryHog },
+                5: { message: "Near impossible level: Large recursive tree, system overload.", complexity: 500000, stressFunction: systemOverload },
+                6: { message: "Maximum overload. Use with extreme caution.", complexity: 1000000, stressFunction: extremeOverload }
             };
 
             if (levels[level]) {
-                document.open();
-                document.write(levels[level]);
-                document.close();
-            } else {
-                levelDisplay.innerHTML = 'Test Completed!';
+                levelDisplay.innerHTML = `
+                    <h2>Level ${level}</h2>
+                    <p>${levels[level].message}</p>
+                    <p>Complexity: ${levels[level].complexity}</p>
+                `;
+                triggerStress(levels[level].stressFunction, levels[level].complexity);
             }
         }
 
+        // Simple loop function for low-level stress
+        function simpleLoop(complexity) {
+            for (let i = 0; i < complexity; i++) {
+                Math.sqrt(i);  // A basic calculation to simulate load
+            }
+        }
+
+        // DOM manipulation to simulate more stress
+        function domManipulation(complexity) {
+            const div = document.createElement('div');
+            for (let i = 0; i < complexity; i++) {
+                div.innerHTML += `<p>Test item ${i}</p>`;  // Adds a lot of DOM nodes to simulate stress
+            }
+            document.body.appendChild(div);
+        }
+
+        // Recursive calculation to simulate CPU-heavy work
+        function recursiveCalc(n) {
+            if (n <= 0) return 0;
+            return n + recursiveCalc(n - 1);
+        }
+
+        // High memory usage (large array allocation)
+        function memoryHog(complexity) {
+            let arr = [];
+            for (let i = 0; i < complexity; i++) {
+                arr.push(new Array(1000).fill('Test'));  // Simulates heavy memory usage
+            }
+        }
+
+        // Simulate system overload with large recursive calls
+        function systemOverload(complexity) {
+            const recursive = (n) => {
+                if (n <= 0) return;
+                setTimeout(() => recursive(n - 1), 0);
+            };
+            recursive(complexity);  // Create a large number of recursive calls
+        }
+
+        // Extreme overload, highly complex
+        function extremeOverload(complexity) {
+            let arr = [];
+            for (let i = 0; i < complexity; i++) {
+                arr.push(new Array(10000).fill('Extreme Stress Test')); // Extreme memory and CPU usage
+            }
+        }
+
+        // Increase the level of difficulty
         function nextLevel() {
             currentLevel++;
-            if (currentLevel <= 10) {
+            if (currentLevel <= 6) {
                 loadLevel(currentLevel);
             } else {
-                levelDisplay.innerHTML = 'Test Completed!';
+                levelDisplay.innerHTML = 'Test Completed! You survived all levels!';
+                warningDisplay.innerHTML = '';
             }
         }
 
+        // Unlock an achievement when the level is completed
         function unlockAchievement(level) {
-            achievements.push(`Level ${level} Crash Survived`);
-            alert(`Achievement Unlocked: Level ${level} Crash Survived`);
+            achievements.push(`Level ${level} Survived`);
+            const achievementMessage = `Achievement Unlocked: Level ${level} Survived`;
+            alert(achievementMessage);
+            achievementsDisplay.innerHTML = `<p>${achievementMessage}</p>` + achievements.join('<br>');
         }
 
-        function saveAchievements() {
-            const blob = new Blob([JSON.stringify(achievements)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'achievements.json';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+        // Show warning before starting the test
+        function showWarning() {
+            warningDisplay.innerHTML = "Warning: This test may cause your browser or system to become unresponsive. Proceed with caution.";
         }
 
-        function startTest() {
+        // Start the test
+        document.getElementById('start-test').addEventListener('click', function() {
+            showWarning();
             loadLevel(currentLevel);
             window.onbeforeunload = function() {
                 unlockAchievement(currentLevel);
-                saveAchievements();
                 nextLevel();
             };
-        }
+        });
+
     </script>
 </body>
 </html>
